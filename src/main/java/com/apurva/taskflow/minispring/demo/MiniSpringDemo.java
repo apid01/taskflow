@@ -9,9 +9,5 @@ import java.lang.reflect.InvocationTargetException;
 public class MiniSpringDemo {
     public static void main(String[] args) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         TFApplication.run(UserService.class, TaskService.class);
-        UserService service =
-                (UserService) TFApplication.getBean(UserService.class);
-
-        System.out.println(service);
     }
 }

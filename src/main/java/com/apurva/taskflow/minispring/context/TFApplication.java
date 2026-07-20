@@ -19,9 +19,16 @@ public class TFApplication {
                 Object bean = constructor.newInstance();
                 beans.put(clazz, bean);
                 System.out.println("Registered Bean : " + clazz.getSimpleName());
-                Field[] fields = clazz.getDeclaredFields();
 
+            }
+        }
+        for (Class<?> clazz : classes) {
+
+            if (clazz.isAnnotationPresent(TFService.class)) {
+                Object bean = getBean(clazz);
+                Field[] fields = clazz.getDeclaredFields();
                 for (Field field : fields) {
+
                     if (field.isAnnotationPresent(TFAutowired.class)) {
                         field.setAccessible(true);
                         Object dependency = getBean(field.getType());
