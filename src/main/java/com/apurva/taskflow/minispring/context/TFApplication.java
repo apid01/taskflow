@@ -1,18 +1,21 @@
 package com.apurva.taskflow.minispring.context;
 import com.apurva.taskflow.minispring.annotation.TFAutowired;
 import com.apurva.taskflow.minispring.annotation.TFService;
+import com.apurva.taskflow.minispring.scanner.ClassScanner;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TFApplication {
     private static final Map<Class<?>, Object> beans = new HashMap<>();
 
-    public static void run(Class<?>... classes) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-
+    public static void run(String packageName) throws Exception {
+        List<Class<?>> classes = ClassScanner.scan(packageName);
+        // Pass 1: Create and register all @TFService beans in the IoC container.
         for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(TFService.class)) {
                 Constructor<?> constructor = clazz.getDeclaredConstructor();
@@ -22,8 +25,8 @@ public class TFApplication {
 
             }
         }
+        // Pass 2: Inject @TFAutowired dependencies into the registered beans.
         for (Class<?> clazz : classes) {
-
             if (clazz.isAnnotationPresent(TFService.class)) {
                 Object bean = getBean(clazz);
                 Field[] fields = clazz.getDeclaredFields();
