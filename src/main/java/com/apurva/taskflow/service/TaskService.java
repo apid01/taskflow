@@ -1,13 +1,14 @@
 package com.apurva.taskflow.service;
 
-import com.apurva.taskflow.minispring.annotation.TFAutowired;
-import com.apurva.taskflow.minispring.annotation.TFService;
+import com.apurva.taskflow.repository.TaskRepository;
+import org.springframework.stereotype.Service;
 
-@TFService
+@Service
 public class TaskService {
-    public TaskService() {
-        System.out.println("TaskService Bean Created");
-        Class<TaskService> clazz = TaskService.class;
 
+    private final TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 }
